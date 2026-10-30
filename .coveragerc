@@ -1,0 +1,17 @@
+[run]
+source =
+    sglang_supa
+    sgl-kernel/python/sgl_kernel
+relative_files = True
+
+omit =
+    */tests/*
+    */test/*
+    */__pycache__/*
+    */__init__.py
+    */benchmark/*
+    */benchmarks/*
+    3rdparty/*
+    build/*
+    dist/*
+    html/*

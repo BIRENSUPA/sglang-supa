@@ -1,0 +1,173 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sglang_supa"
+dynamic = ["version"]
+description = "Third-party SGLang platform plugin template for the supa platform"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+  "torch @ https://download.pytorch.org/whl/cpu/torch-2.12.0%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl",
+  "torchao @ https://download.pytorch.org/whl/cpu/torchao-0.17.0%2Bcpu-py3-none-any.whl",
+  "torchaudio @ https://download.pytorch.org/whl/cpu/torchaudio-2.11.0%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl",
+  "torchcodec @ https://download.pytorch.org/whl/cpu/torchcodec-0.16.0%2Bcpu-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+  "torchvision @ https://download.pytorch.org/whl/cpu/torchvision-0.27.0%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl",
+  "fastcore",
+  "IPython",
+  "aiohttp",
+  "anthropic>=0.20.0",
+  "blobfile==3.0.0",
+  "build",
+  "compressed-tensors",
+  "decord2 ; sys_platform == 'linux' and (platform_machine == 'aarch64' or platform_machine == 'arm64' or platform_machine == 'armv7l')",
+  "datasets",
+  "einops",
+  "fastapi",
+  "gguf",
+  "interegular",
+  "llguidance>=1.7.6,<2.0.0",
+  "modelscope",
+  "msgspec",
+  "ninja",
+  "easydict",
+  "numpy",
+  "openai-harmony==0.0.4",
+  "openai==2.6.1",
+  "orjson",
+  "outlines==0.1.11",
+  "packaging",
+  "partial_json_parser",
+  "pillow",
+  "prometheus-client>=0.20.0",
+  "psutil",
+  "py-spy",
+  "pybase64",
+  "pydantic",
+  "python-multipart",
+  "pyzmq>=25.1.2",
+  "requests",
+  "scipy",
+  "sentencepiece",
+  "setproctitle",
+  "soundfile==0.13.1",
+  "tiktoken",
+  "timm==1.0.16",
+  "torch_memory_saver>=0.0.9.post1",
+  "av ; sys_platform == 'linux' and (platform_machine == 'aarch64' or platform_machine == 'arm64' or platform_machine == 'armv7l')",
+  "tqdm",
+  "mistral_common>=1.11.5",
+  "transformers==5.12.1",
+  "uvicorn",
+  "uvloop",
+  "watchfiles",
+  "xgrammar==0.2.1",
+  "smg-grpc-servicer>=0.5.0",
+]
+
+[project.optional-dependencies]
+checkpoint-engine = ["checkpoint-engine==0.1.2"]
+runai = ["runai-model-streamer[s3,gcs,azure]>=0.15.7"]
+diffusion = [
+  "PyYAML==6.0.1",
+  "cloudpickle==3.1.2",
+  "diffusers==0.37.0",
+  "imageio==2.36.0",
+  "imageio-ffmpeg==0.5.1",
+  "moviepy>=2.0.0",
+  "nvidia-modelopt",
+  "opencv-python-headless==4.10.0.84",
+  "remote-pdb==2.1.0",
+  "st_attn==0.0.7 ; platform_machine != 'aarch64' and platform_machine != 'arm64'",
+  "vsa==0.0.4 ; platform_machine != 'aarch64' and platform_machine != 'arm64'",
+  "runai_model_streamer>=0.15.7",
+  "cache-dit==1.3.0",
+  "addict==2.4.0",
+  "av==16.1.0",
+  "scikit-image==0.25.2",
+  "trimesh>=4.0.0",
+  "xatlas",
+]
+
+ray = [
+  "ray[default]>=2.54.0",
+]
+
+tracing = [
+  "opentelemetry-api",
+  "opentelemetry-exporter-otlp",
+  "opentelemetry-exporter-otlp-proto-grpc",
+  "opentelemetry-sdk",
+]
+
+http2 = [
+  "granian>=2.6.0",
+]
+
+fastokens = [
+  "fastokens>=0.1.1,<0.2.0",
+]
+
+test = [
+  "accelerate",
+  "addict",
+  "expecttest",
+  "jsonlines",
+  "lm-eval[api]>=0.4.9.2",
+  "matplotlib",
+  "pandas",
+  "parameterized",
+  "peft>=0.18.0",
+  "polars",
+  "pytest",
+  "pytest-cov",
+  "diff-cover",
+  "sentence_transformers",
+  "sglang_supa[fastokens]",
+  "tabulate",
+  "granian>=2.6.0",
+]
+
+dev = ["sglang_supa[test]"]
+
+all = [
+  "sglang_supa[diffusion]",
+  "sglang_supa[tracing]",
+  "sglang_supa[http2]",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"sglang_supa" = [
+  "kernels/jit/include/**/*",
+  "kernels/jit/csrc/**/*",
+  "kernels/jit_overlay/include/**/*",
+]
+
+[tool.setuptools.packages.find]
+include = ["sglang_supa*"]
+
+[project.entry-points."sglang.srt.platforms"]
+supa = "sglang_supa.entrypoints:activate_supa"
+
+[project.entry-points."sglang.srt.plugins"]
+supa_hooks = "sglang_supa.hooks:register_hooks"
+
+[project.scripts]
+sglang = "sglang_supa.cli.main:main"
+sglang-supa-init = "sglang_supa.plugin_setup:install_usercustomize"
+
+[tool.sglang-supa]
+# Plugin iteration version — independent of sglang base version.
+# Bump rules:
+#   supa-major: sglang major upgrade (0.5.x → 0.6.x) or plugin architectural rewrite
+#   supa-minor: sglang patch/post upgrade, or new plugin feature/kernel
+#   supa-patch: plugin-only bugfix, sglang version unchanged
+# On any sglang upgrade: reset lower fields to 0.
+supa-major = 0
+supa-minor = 1
+supa-patch = 0
